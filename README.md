@@ -7,9 +7,8 @@
 
 ## 🌐 Live Deployment Links
 
-- **Frontend (Vercel):** [https://clarix-eclipse-hackathon.vercel.app](https://clarix-eclipse-hackathon.vercel.app)
-- **Backend API (Render):** [https://clarix-eclipse-hackathon.onrender.com](https://clarix-eclipse-hackathon.onrender.com)
-*(Note: Since the backend is hosted on Render's Free Tier, the first request may take ~60 seconds to spin up and load the AI models into memory. Subsequent requests will be fast!)*
+- **Frontend (Vercel):** [Clarix Live](https://clarix-eclipse-hackathon.vercel.app)
+- **Backend API (Render):** [Clarix API](https://clarix-eclipse-hackathon.onrender.com)
 
 ---
 
