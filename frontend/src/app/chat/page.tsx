@@ -296,7 +296,7 @@ function ChatContent() {
                   >
                     {activeSession.title || "New Chat"}
                   </div>
-                  <svg className="w-[14px] h-[14px] fill-none stroke-[#333333] cursor-pointer hover:stroke-text-muted transition-colors" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" onClick={() => { setTitleInput(activeSession.title); setIsEditingTitle(true); }}>
+                  <svg className="w-[16px] h-[16px] fill-none stroke-[#333333] cursor-pointer hover:stroke-text-muted transition-colors" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" onClick={() => { setTitleInput(activeSession.title); setIsEditingTitle(true); }}>
                     <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
                   </svg>
                 </>
@@ -320,7 +320,7 @@ function ChatContent() {
               className="w-[30px] h-[30px] bg-surface border-[0.5px] border-[var(--border)] rounded-[6px] flex items-center justify-center cursor-pointer transition-colors hover:bg-[#161616] hover:border-white/30" 
               onClick={() => setIsPanelOpen(!isPanelOpen)}
             >
-              <svg className="w-[14px] h-[14px] stroke-[#888] fill-none" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-[16px] h-[16px] stroke-[#888] fill-none" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
                 <line x1="15" y1="3" x2="15" y2="21"/>
               </svg>
@@ -360,7 +360,7 @@ function ChatContent() {
 
                      <button 
                        onClick={(e) => handleDeleteSession(e, s.id)}
-                       className="absolute right-[-4px] top-[-4px] w-[14px] h-[14px] bg-[var(--border)] border-[0.5px] border-white/30 rounded-full text-[9px] text-white/60 hidden group-hover:flex items-center justify-center hover:bg-[#ff6b6b] hover:text-[#fff] hover:border-[#ff6b6b]"
+                       className="absolute right-[-4px] top-[-4px] w-[16px] h-[16px] bg-[var(--border)] border-[0.5px] border-white/30 rounded-full text-[9px] text-white/60 hidden group-hover:flex items-center justify-center hover:bg-[#ff6b6b] hover:text-[#fff] hover:border-[#ff6b6b]"
                      >
                        ×
                      </button>
@@ -475,21 +475,21 @@ function ChatContent() {
                 onChange={handleTextAreaChange}
                 onKeyDown={handleInputKeyDown}
                 placeholder="Ask a question about your documents..."
-                className="bg-transparent border-none outline-none text-white text-[13px] leading-[1.55] flex-1 resize-none min-h-[20px] max-h-[120px] placeholder:text-white/70"
+                  className="bg-transparent border-none outline-none text-white text-[15px] leading-[1.6] flex-1 resize-none min-h-[22px] max-h-[160px] placeholder:text-white/60"
                 rows={1}
               />
               <button 
                 onClick={handleSend}
                 disabled={!input.trim() || isLoading}
-                className={`w-[32px] h-[32px] rounded-[7px] flex items-center justify-center shrink-0 transition-all duration-[0.15s] ease border-none
+                className={`w-[36px] h-[36px] rounded-[8px] flex items-center justify-center shrink-0 transition-all duration-[0.15s] ease border-none
                   ${(!input.trim() || isLoading) 
-                    ? 'bg-accent/10 cursor-not-allowed' 
-                    : 'bg-[var(--accent)] cursor-pointer hover:bg-[#00c8f0] hover:scale-[1.05]'
+                    ? 'bg-accent/10 text-accent/30 cursor-not-allowed' 
+                    : 'bg-accent text-background cursor-pointer hover:bg-accent-hover hover:scale-[1.05]'
                   }
                 `}
               >
-                <svg viewBox="0 0 16 16" className="w-[14px] h-[14px]">
-                  <path d="M2 14L14 8 2 2v4.5l8 1.5-8 1.5V14z" fill="#080808"/>
+                <svg viewBox="0 0 16 16" className="w-[16px] h-[16px]">
+                  <path d="M2 14L14 8 2 2v4.5l8 1.5-8 1.5V14z" fill="currentColor"/>
                 </svg>
               </button>
             </div>
@@ -595,6 +595,8 @@ export default function ChatPage() {
     </Suspense>
   );
 }
+
+
 
 
 
