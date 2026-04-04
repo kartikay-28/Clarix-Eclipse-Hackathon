@@ -28,7 +28,7 @@ async def lifespan(app: FastAPI):
     load models efficiently preventing request-level cold starts.
     """
     print("Startup sequence initiated.")
-    load_embedding_model() # Load sentence transformers globally
+    # load_embedding_model() # Skipped for lazy loading
     print("Startup sequence complete.")
     yield
     print("Shutdown sequence initiated.")
@@ -92,4 +92,5 @@ async def global_exception_handler(request, exc):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)

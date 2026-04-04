@@ -67,10 +67,10 @@ export default function DocumentsPage() {
 
   return (
     <>
-      <div className="w-full h-full p-8 flex flex-col">
+      <div className="w-full h-full p-8 flex flex-col anim-fade-up">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold mb-1">Documents</h1>
-          <p className="text-[#888] text-sm">{docs.length} documents in your workspace</p>
+          <h1 className="text-3xl font-bold mb-1 tracking-tight text-text-primary">Documents</h1>
+          <p className="text-text-muted text-sm">{docs.length} documents in your workspace</p>
         </div>
 
         <div className="flex justify-between items-center mb-6">
@@ -79,7 +79,7 @@ export default function DocumentsPage() {
             placeholder="Search documents..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="bg-[#111] border border-[#1e1e1e] rounded-lg px-[14px] py-2 text-[13px] text-[#F5F5F5] w-[280px] outline-none focus:border-[#00B4D8]"
+            className="input-field w-[280px]"
           />
 
           <div className="flex gap-2">
@@ -87,10 +87,10 @@ export default function DocumentsPage() {
               <button
                 key={type}
                 onClick={() => setFilterType(type)}
-                className={`px-3 py-[6px] text-xs rounded-full border transition-colors ${
+                className={`px-3 py-1 text-xs rounded-full border transition-colors ${
                   filterType === type
-                    ? "bg-[#0d2e38] text-[#00B4D8] border-[#1a4a5a]"
-                    : "bg-[#111] border-[#1e1e1e] text-[#555]"
+                    ? "bg-accent/10 border-accent/20 text-accent font-medium space-x-1"
+                    : "bg-surface border-border text-text-muted hover:text-text-secondary hover:bg-surfaceHover"
                 }`}
               >
                 {type.toUpperCase()}
@@ -102,25 +102,25 @@ export default function DocumentsPage() {
         {loading ? (
           <div className="flex flex-col gap-2">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-12 rounded-md anim-shimmer bg-[#111]" />
+              <div key={i} className="h-12 skeleton" />
             ))}
           </div>
         ) : filteredDocs.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center gap-4">
-            <svg className="w-12 h-12 text-[#222]" fill="currentColor" viewBox="0 0 24 24">
+            <svg className="w-12 h-12 text-border" fill="currentColor" viewBox="0 0 24 24">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
             </svg>
             <div className="flex flex-col items-center gap-1">
-              <span className="text-[#F5F5F5] font-medium">No documents yet</span>
-              <span className="text-[#555] text-sm">Upload your first document to get started</span>
+              <span className="text-text-primary font-medium">No documents yet</span>
+              <span className="text-text-muted text-sm">Upload your first document to get started</span>
             </div>
-            <button onClick={() => router.push("/upload")} className="px-5 py-[10px] rounded-lg bg-[#00B4D8] text-[#0D0D0D] font-medium text-sm hover:opacity-90">
+            <button onClick={() => router.push("/upload")} className="btn-primary text-sm mt-2">
               Upload Document
             </button>
           </div>
         ) : (
-          <div className="bg-[#111] border border-[#1e1e1e] rounded-xl overflow-hidden flex-1 flex flex-col">
-            <div className="bg-[#0D0D0D] border-b border-[#1e1e1e] px-5 py-3 grid grid-cols-[3fr_1fr_1fr_1.5fr_1fr_1fr_1fr] text-[11px] text-[#444] uppercase tracking-wider">
+          <div className="card p-0 flex-1 flex flex-col overflow-hidden">
+            <div className="bg-surfaceHover border-b border-border px-5 py-3 grid grid-cols-[3fr_1fr_1fr_1.5fr_1fr_1fr_1fr] text-[11px] text-text-muted uppercase tracking-wider font-semibold">
               <div>File Name</div>
               <div>Type</div>
               <div>Size</div>
@@ -130,56 +130,56 @@ export default function DocumentsPage() {
               <div className="text-right">Actions</div>
             </div>
 
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto divide-y divide-border">
               {filteredDocs.map(doc => {
                 const dateStr = new Date(doc.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                 return (
-                  <div key={doc.id} className="px-5 py-[14px] border-b border-[#111] hover:bg-[#0a0a0a] transition-colors grid grid-cols-[3fr_1fr_1fr_1.5fr_1fr_1fr_1fr] items-center text-[13px]">
+                  <div key={doc.id} className="px-5 py-[14px] hover:bg-surfaceHover transition-colors grid grid-cols-[3fr_1fr_1fr_1.5fr_1fr_1fr_1fr] items-center text-[13px]">
                     
                     {/* File Name */}
                     <div className="flex items-center gap-[10px] overflow-hidden pr-4">
                       <div className={`w-7 h-7 rounded flex items-center justify-center font-bold text-[9px] shrink-0
-                        ${doc.file_type === 'pdf' ? 'bg-[#2a1010] text-[#ff6b6b]' : 
-                          doc.file_type === 'docx' ? 'bg-[#0d1a2e] text-[#4d9fff]' : 
-                          'bg-[#0d2010] text-[#4dff91]'}`}
+                        ${doc.file_type === 'pdf' ? 'bg-error/10 text-error' : 
+                          doc.file_type === 'docx' ? 'bg-accent/10 text-accent' : 
+                          'bg-success/10 text-success'}`}
                       >
                         {doc.file_type.toUpperCase()}
                       </div>
-                      <span className="text-[#F5F5F5] font-medium truncate">{doc.file_name}</span>
+                      <span className="text-text-primary font-medium truncate">{doc.file_name}</span>
                     </div>
 
                     {/* Type Pill */}
                     <div>
-                      <span className={`text-[11px] px-2 py-[3px] rounded border
-                        ${doc.file_type === 'pdf' ? 'bg-[#2a1010] text-[#ff6b6b] border-[#3a1515]' : 
-                          doc.file_type === 'docx' ? 'bg-[#0d1a2e] text-[#4d9fff] border-[#1a2a4a]' : 
-                          'bg-[#0d2010] text-[#4dff91] border-[#1a3a20]'}`}
+                      <span className={`text-[11px] px-2 py-1 rounded-full border
+                        ${doc.file_type === 'pdf' ? 'bg-error/10 text-error border-error/20' : 
+                          doc.file_type === 'docx' ? 'bg-accent/10 text-accent border-accent/20' : 
+                          'bg-success/10 text-success border-success/20'}`}
                       >
                         {doc.file_type.toUpperCase()}
                       </span>
                     </div>
 
                     {/* Size */}
-                    <div className="text-[#666] text-xs">{doc.file_size_formatted}</div>
+                    <div className="text-text-muted text-xs">{doc.file_size_formatted}</div>
 
                     {/* Uploaded By */}
-                    <div className="text-[#888] truncate pr-4">{doc.uploaded_by_name}</div>
+                    <div className="text-text-secondary truncate pr-4">{doc.uploaded_by_name}</div>
 
                     {/* Date */}
-                    <div className="text-[#555] text-xs">{dateStr}</div>
+                    <div className="text-text-muted text-xs">{dateStr}</div>
 
                     {/* Status */}
                     <div className="flex items-center">
-                      <span className={`flex items-center gap-[6px] px-2 py-[2px] rounded-full text-xs font-medium w-fit
-                        ${doc.status === 'ready' ? 'bg-[#0d2010] text-[#4dff91]' :
-                          doc.status === 'processing' ? 'bg-[#2a2010] text-[#ffb347]' :
-                          'bg-[#2a1010] text-[#ff6b6b]'
+                      <span className={`flex items-center gap-[6px] px-2 py-0.5 rounded-full text-xs font-medium w-fit border
+                        ${doc.status === 'ready' ? 'bg-success/10 text-success border-success/20' :
+                          doc.status === 'processing' ? 'bg-warning/10 text-warning border-warning/20' :
+                          'bg-error/10 text-error border-error/20'
                         }`}
                       >
                         <div className={`w-1.5 h-1.5 rounded-full ${
-                          doc.status === 'ready' ? 'bg-[#4dff91]' :
-                          doc.status === 'processing' ? 'bg-[#ffb347] animate-pulse-dot' :
-                          'bg-[#ff6b6b]'
+                          doc.status === 'ready' ? 'bg-success' :
+                          doc.status === 'processing' ? 'bg-warning animate-pulse' :
+                          'bg-error'
                         }`} />
                         {doc.status.charAt(0).toUpperCase() + doc.status.slice(1)}
                       </span>
@@ -187,7 +187,7 @@ export default function DocumentsPage() {
 
                     {/* Actions */}
                     <div className="flex justify-end gap-1.5">
-                      <button onClick={() => handleChat(doc.id)} className="bg-[#0d2e38] text-[#00B4D8] border border-[#1a4a5a] px-3 py-1.5 rounded-md text-[11px] hover:opacity-80">
+                      <button onClick={() => handleChat(doc.id)} className="bg-surface text-accent border border-border px-3 py-1.5 rounded-md text-[11px] hover:bg-accent/10 transition-colors">
                         Chat
                       </button>
                       
@@ -197,8 +197,8 @@ export default function DocumentsPage() {
                           disabled={deletingId === doc.id}
                           className={`px-3 py-1.5 rounded-md text-[11px] border transition-colors ${
                             confirmDeleteId === doc.id 
-                              ? 'bg-[#2a1010] text-[#ff6b6b] border-[#3a1515]' 
-                              : 'bg-transparent text-[#555] border-[#1e1e1e] hover:text-[#fff]'
+                              ? 'bg-error/10 text-error border-error/20'
+                              : 'bg-transparent text-text-muted border-border hover:text-error hover:border-error/20 hover:bg-error/5'
                           } ${deletingId === doc.id ? 'opacity-50 cursor-wait' : ''}`}
                         >
                           {confirmDeleteId === doc.id ? 'Confirm?' : 'Delete'}

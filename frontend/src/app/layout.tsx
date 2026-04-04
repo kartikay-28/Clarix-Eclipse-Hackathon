@@ -29,14 +29,16 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-background text-text-primary" style={{ fontFamily: "'Inter', sans-serif", margin: 0, padding: 0 }}>
+      <body className="bg-background text-text-primary antialiased selection:bg-accent/30">
         <AuthProvider>
           {isAuthRoute ? (
-            children
+            <main className="min-h-screen flex flex-col bg-background">
+              {children}
+            </main>
           ) : (
-            <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#080808' }}>
+            <div className="flex h-screen overflow-hidden bg-background">
               <Sidebar />
-              <main style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+              <main className="flex-1 flex flex-col overflow-y-auto bg-background">
                 {children}
               </main>
             </div>
@@ -45,8 +47,8 @@ export default function RootLayout({
             position="bottom-right"
             toastOptions={{
               style: {
-                background: '#161616',
-                color: '#fff',
+                background: '#111111',
+                color: '#e8e8e8',
                 border: '1px solid #1f1f1f',
               },
             }}

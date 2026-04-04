@@ -54,12 +54,12 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-8">
+    <div className="max-w-5xl mx-auto p-8 anim-fade-up">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-accent to-accent-hover mb-2">
+        <h1 className="text-3xl font-bold text-text-primary mb-2 tracking-tight">
           Knowledge Ingestion
         </h1>
-        <p className="text-text-muted max-w-2xl">
+        <p className="text-text-muted max-w-2xl text-sm leading-relaxed">
           Upload PDF and TXT documents to build your organization&apos;s context. Documents are automatically chunked, embedded, and stored securely.
         </p>
       </div>
@@ -69,47 +69,47 @@ export default function UploadPage() {
         className={`border-2 border-dashed rounded-3xl p-12 text-center transition-all duration-200 cursor-pointer ${
           isDragActive
             ? 'border-accent bg-accent/10 border-solid'
-            : 'border-border bg-surface hover:border-gray-500 hover:bg-surface/80'
+            : 'border-border bg-surface hover:border-text-muted hover:bg-surfaceHover'
         }`}
       >
         <input {...getInputProps()} />
         <div className="mx-auto w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center text-accent mb-6">
           <IconUpload size={40} />
         </div>
-        <h3 className="text-xl font-bold mb-2">Drag and drop documents</h3>
+        <h3 className="text-xl font-bold mb-2 text-text-primary">Drag and drop documents</h3>
         <p className="text-text-muted text-sm mb-6">
           Support for .pdf and .txt files. Maximum 20MB per file.
         </p>
-        <button className="px-6 py-2.5 bg-background border border-border text-gray-300 font-medium rounded-xl hover:border-accent hover:text-white transition-colors">
+        <button className="btn-secondary">
           Browse Files
         </button>
       </div>
 
       {files.length > 0 && (
-        <div className="mt-8 border border-border bg-surface rounded-2xl overflow-hidden">
+        <div className="mt-8 card overflow-hidden p-0 rounded-2xl">
           <div className="px-6 py-4 border-b border-border flex items-center justify-between">
-            <h3 className="font-semibold text-lg flex items-center gap-2">
+            <h3 className="font-semibold text-lg flex items-center gap-2 text-text-primary">
               <IconFilePlus className="text-accent" />
               Selected Files ({files.length})
             </h3>
             <button
               onClick={() => setFiles([])}
-              className="text-sm text-text-muted hover:text-gray-300"
+              className="text-sm text-text-muted hover:text-text-secondary transition-colors"
             >
               Clear All
             </button>
           </div>
           
-          <ul className="divide-y divide-dark-border max-h-[400px] overflow-y-auto">
+          <ul className="divide-y divide-border max-h-[400px] overflow-y-auto">
             {files.map((file, idx) => (
-              <li key={idx} className="px-6 py-4 flex items-center justify-between group">
+              <li key={idx} className="px-6 py-4 flex items-center justify-between group hover:bg-surfaceHover transition-colors">
                 <div className="flex-1 min-w-0 pr-4">
-                  <p className="text-sm font-medium text-gray-200 truncate">{file.name}</p>
+                  <p className="text-sm font-medium text-text-primary truncate">{file.name}</p>
                   <p className="text-xs text-text-muted mt-1">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
                 </div>
                 <button
                   onClick={() => removeFile(idx)}
-                  className="p-2 text-text-muted bg-background rounded-lg opacity-0 group-hover:opacity-100 hover:text-red-400 hover:bg-red-400/10 transition-all"
+                  className="p-2 text-text-muted bg-background rounded-lg opacity-0 group-hover:opacity-100 hover:text-error hover:bg-error/10 transition-all"
                   aria-label="Remove file"
                   disabled={uploading}
                 >
@@ -126,7 +126,7 @@ export default function UploadPage() {
                   <span>Uploading documents...</span>
                   <span>{progress.toFixed(0)}%</span>
                 </div>
-                <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-surface rounded-full overflow-hidden border border-border">
                   <div
                     className="h-full bg-accent transition-all duration-300"
                     style={{ width: `${progress}%` }}
@@ -136,7 +136,8 @@ export default function UploadPage() {
             ) : (
               <button
                 onClick={handleUpload}
-                className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-accent to-accent-hover text-black font-bold border-none rounded-xl disabled:opacity-50"
+                disabled={uploading}
+                className="w-full btn-primary flex items-center justify-center gap-2 py-3 rounded-xl disabled:opacity-50"
               >
                 <IconCheck size={20} />
                 Process Documents

@@ -14,7 +14,7 @@ def load_embedding_model():
         print("Embedding model loaded.")
 
 def get_embedder() -> SentenceTransformer:
-    """Returns the loaded global embedding model."""
+    """Returns the loaded global embedding model, loading it first if necessary."""
     if _embedding_model is None:
-        raise RuntimeError("Embedding model not loaded. Call load_embedding_model() first.")
+        load_embedding_model()
     return _embedding_model

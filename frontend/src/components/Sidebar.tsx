@@ -25,7 +25,7 @@ export default function Sidebar() {
       href: '/dashboard',
       label: 'Dashboard',
       icon: (
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2" style={{ width: '15px', height: '15px' }}>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[15px] h-[15px]">
           <rect x="2" y="2" width="5" height="5" rx="1"/>
           <rect x="9" y="2" width="5" height="5" rx="1"/>
           <rect x="2" y="9" width="5" height="5" rx="1"/>
@@ -37,7 +37,7 @@ export default function Sidebar() {
       href: '/chat',
       label: 'Chat',
       icon: (
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2" style={{ width: '15px', height: '15px' }}>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[15px] h-[15px]">
           <path d="M2 11V5a1 1 0 011-1h10a1 1 0 011 1v6a1 1 0 01-1 1H5l-3 2v-2z"/>
         </svg>
       )
@@ -49,7 +49,7 @@ export default function Sidebar() {
       href: '/upload',
       label: 'Upload',
       icon: (
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '15px', height: '15px' }}>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="w-[15px] h-[15px]">
           <path d="M8 2v8M5 7l3-3 3 3"/>
           <path d="M3 13h10"/>
         </svg>
@@ -59,7 +59,7 @@ export default function Sidebar() {
       href: '/documents',
       label: 'Documents',
       icon: (
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" style={{ width: '15px', height: '15px' }}>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" className="w-[15px] h-[15px]">
           <rect x="3" y="2" width="10" height="12" rx="1"/>
           <path d="M6 6h4M6 9h4M6 12h2"/>
         </svg>
@@ -68,59 +68,34 @@ export default function Sidebar() {
   ];
 
   return (
-    <div style={{
-      width: '220px',
-      minWidth: '220px',
-      height: '100vh',
-      background: '#0a0a0a',
-      borderRight: '0.5px solid #181818',
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'hidden',
-      flexShrink: 0
-    }}>
+    <div className="w-[220px] min-w-[220px] h-screen bg-surface border-r border-border flex flex-col overflow-hidden shrink-0">
       {/* BRAND SECTION */}
-      <div style={{ padding: '20px 18px 16px', borderBottom: '0.5px solid #181818' }}>
-        <div style={{ fontSize: '18px', fontWeight: 600, color: '#00B4D8', letterSpacing: '-0.5px' }}>Clarix</div>
-        <div style={{ fontSize: '9px', color: '#2a2a2a', letterSpacing: '2px', textTransform: 'uppercase', marginTop: '2px' }}>ENTERPRISE SEARCH</div>
+      <div className="px-[18px] py-[20px] pb-[16px] border-b border-border">
+        <div className="flex items-center gap-[8px]">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-[20px] h-[20px] text-accent">
+            <rect x="3" y="11" width="18" height="10" rx="2" />
+            <circle cx="12" cy="5" r="2" />
+            <path d="M12 7v4" />
+            <line x1="8" y1="16" x2="8" y2="16" />
+            <line x1="16" y1="16" x2="16" y2="16" />
+          </svg>
+          <div className="text-[18px] font-semibold text-accent tracking-tight">Clarix</div>
+        </div>
+        <div className="text-[9px] text-text-muted tracking-[2px] uppercase mt-[6px]">ENTERPRISE SEARCH</div>
       </div>
 
       {/* NAV SECTION */}
-      <div style={{ padding: '12px 10px', flex: 1, overflowY: 'auto' }}>
-        <div style={{ fontSize: '9px', color: '#2a2a2a', letterSpacing: '1.5px', textTransform: 'uppercase', padding: '0 8px', marginBottom: '6px', marginTop: '4px' }}>
+      <div className="p-3 flex-1 overflow-y-auto">
+        <div className="text-[9px] text-text-muted tracking-[1.5px] uppercase px-2 mb-[6px] mt-1">
           NAVIGATION
         </div>
         
         {navItems.map(item => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
           return (
-            <Link key={item.href} href={item.href} style={{ textDecoration: 'none' }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '9px 10px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                color: isActive ? '#00B4D8' : '#444444',
-                background: isActive ? '#0d2535' : 'transparent',
-                cursor: 'pointer',
-                marginBottom: '2px',
-                transition: 'all 0.15s ease'
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.background = '#111111';
-                  e.currentTarget.style.color = '#888888';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = '#444444';
-                }
-              }}>
-                <div style={{ display: 'flex', color: isActive ? '#00B4D8' : 'inherit' }}>
+            <Link key={item.href} href={item.href} className="block no-underline">
+              <div className={`flex items-center gap-[10px] py-[9px] px-[10px] rounded-lg text-[13px] mb-[2px] transition-colors duration-150 cursor-pointer ${isActive ? 'bg-accent/10 text-accent' : 'text-text-muted hover:bg-surfaceHover hover:text-text-secondary'}`}>
+                <div className={`flex ${isActive ? 'text-accent' : 'inherit'}`}>
                   {item.icon}
                 </div>
                 <span>{item.label}</span>
@@ -129,40 +104,16 @@ export default function Sidebar() {
           );
         })}
 
-        <div style={{ fontSize: '9px', color: '#2a2a2a', letterSpacing: '1.5px', textTransform: 'uppercase', padding: '0 8px', marginBottom: '6px', marginTop: '16px' }}>
+        <div className="text-[9px] text-text-muted tracking-[1.5px] uppercase px-2 mb-[6px] mt-4">
           WORKSPACE
         </div>
         
         {workspaceItems.map(item => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
           return (
-            <Link key={item.href} href={item.href} style={{ textDecoration: 'none' }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '9px 10px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                color: isActive ? '#00B4D8' : '#444444',
-                background: isActive ? '#0d2535' : 'transparent',
-                cursor: 'pointer',
-                marginBottom: '2px',
-                transition: 'all 0.15s ease'
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.background = '#111111';
-                  e.currentTarget.style.color = '#888888';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = '#444444';
-                }
-              }}>
-                <div style={{ display: 'flex', color: isActive ? '#00B4D8' : 'inherit' }}>
+            <Link key={item.href} href={item.href} className="block no-underline">
+              <div className={`flex items-center gap-[10px] py-[9px] px-[10px] rounded-lg text-[13px] mb-[2px] transition-colors duration-150 cursor-pointer ${isActive ? 'bg-accent/10 text-accent' : 'text-text-muted hover:bg-surfaceHover hover:text-text-secondary'}`}>
+                <div className={`flex ${isActive ? 'text-accent' : 'inherit'}`}>
                   {item.icon}
                 </div>
                 <span>{item.label}</span>
@@ -173,65 +124,23 @@ export default function Sidebar() {
       </div>
 
       {/* USER SECTION */}
-      <div style={{ padding: '14px 10px', borderTop: '0.5px solid #181818', flexShrink: 0 }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          padding: '8px 10px',
-          borderRadius: '8px',
-          cursor: 'pointer',
-          transition: 'background 0.15s ease'
-        }}
-        onMouseEnter={(e) => e.currentTarget.style.background = '#111111'}
-        onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
-          <div style={{
-            width: '30px',
-            height: '30px',
-            borderRadius: '50%',
-            background: '#0d2535',
-            border: '0.5px solid #1a4a5a',
-            fontSize: '11px',
-            fontWeight: 600,
-            color: '#00B4D8',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0
-          }}>
+      <div className="p-3.5 border-t border-border shrink-0">
+        <div className="flex items-center gap-[10px] py-2 px-[10px] rounded-lg cursor-pointer transition-colors duration-150 hover:bg-surfaceHover">
+          <div className="w-[30px] h-[30px] rounded-full bg-accent/10 border border-accent/20 text-[11px] font-semibold text-accent flex items-center justify-center shrink-0">
             {getInitials(user.name)}
           </div>
-          <div style={{ overflow: 'hidden' }}>
-            <div style={{ fontSize: '12px', fontWeight: 500, color: '#cccccc', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          <div className="overflow-hidden">
+            <div className="text-[12px] font-medium text-text-primary whitespace-nowrap overflow-hidden text-ellipsis">
               {user.name}
             </div>
-            <div style={{ fontSize: '10px', color: '#333333', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <div className="text-[10px] text-text-muted whitespace-nowrap overflow-hidden text-ellipsis">
               {user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Employee'} · {user.org_name || 'Workspace'}
             </div>
           </div>
         </div>
 
-        <div onClick={logout} style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
-          padding: '7px 10px',
-          borderRadius: '6px',
-          fontSize: '11px',
-          color: '#2a2a2a',
-          cursor: 'pointer',
-          marginTop: '4px',
-          transition: 'all 0.15s ease'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = '#555555';
-          e.currentTarget.style.background = '#0f0f0f';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.color = '#2a2a2a';
-          e.currentTarget.style.background = 'transparent';
-        }}>
-          <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" fill="none" style={{ width: '12px', height: '12px' }}>
+        <div onClick={logout} className="flex items-center gap-[6px] py-[7px] px-[10px] rounded-md text-[11px] text-text-muted cursor-pointer mt-1 transition-colors duration-150 hover:text-text-secondary hover:bg-surfaceHover">
+          <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" fill="none" className="w-[12px] h-[12px]">
             <path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3 M10 11l4-3-4-3M14 8H6" />
           </svg>
           Log out
