@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -62,12 +62,25 @@ limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# Health Check Route
+# Root and Health Check Routes for UptimeRobot Configuration
+@app.head("/", tags=["system"])
+@app.get("/", tags=["system"])
+async def root_check(request: Request):
+    """
+    Root heartbeat check.
+    """
+    if request.method == "HEAD":
+        return Response(status_code=status.HTTP_200_OK)
+    return {"status": "ok", "message": "Clarix API is running"}
+
+@app.head("/health", tags=["system"])
 @app.get("/health", tags=["system"])
-async def health_check():
+async def health_check(request: Request):
     """
-    Standard heartbeat check.
+    Standard heartbeat check supporting Render and UptimeRobot HEAD requests.
     """
+    if request.method == "HEAD":
+        return Response(status_code=status.HTTP_200_OK)
     return {"status": "ok"}
 
 # Router inclusion
