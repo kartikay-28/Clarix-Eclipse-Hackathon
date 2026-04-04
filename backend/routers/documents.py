@@ -10,8 +10,19 @@ from database.models import User, Document, RoleEnum
 from middleware.auth_middleware import get_current_user, require_admin
 from models.response_models import DocumentResponse
 from services.vector_store import delete_document as delete_vector_document
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 router = APIRouter(prefix="/documents", tags=["documents"])
+
+# Configure Cloudinary
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME", "do9syuotn"),
+    api_key=os.getenv("CLOUDINARY_API_KEY", "934141157912738"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    secure=True
+)
 
 def format_size(size_in_bytes: int) -> str:
     if size_in_bytes is None:
@@ -121,10 +132,17 @@ def delete_document(
     if not can_delete:
          raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Permission denied")
 
-    # 1. Delete from file system
+    # 1. Delete from file system or Cloudinary
     try:
-        if doc.file_path and os.path.exists(doc.file_path):
-            os.remove(doc.file_path)
+        if doc.file_path:
+            if "cloudinary.com" in doc.file_path:
+                # Extract public_id from Cloudinary URL (format varies slightly, basic heuristic)
+                # Typical format: http://res.cloudinary.com/cloud_name/raw/upload/v1234/clarix/org_id/doc_id_filename.ext
+                # But it's easier to use the exact structure we uploaded: public_id=clarix/{org_id}/{doc_id}_{filename}
+                public_id = f"clarix/{doc.org_id}/{doc.id}_{doc.file_name}"
+                cloudinary.uploader.destroy(public_id, resource_type="raw")
+            elif os.path.exists(doc.file_path):
+                os.remove(doc.file_path)
     except Exception as e:
         print(f"Failed to delete file {doc.file_path}: {e}")
 

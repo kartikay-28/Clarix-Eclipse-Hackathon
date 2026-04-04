@@ -17,3 +17,4 @@ pandas==2.1.4
 python-dotenv==1.0.0
 pydantic==2.5.3
 slowapi==0.1.9
+cloudinary==1.38.0
