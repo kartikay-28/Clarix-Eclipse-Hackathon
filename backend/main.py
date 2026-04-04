@@ -47,7 +47,7 @@ origins = [
     "http://localhost:3000", # Dev configuration required
     "http://127.0.0.1:3000",
     "https://clarix-eclipse-hackathon.onrender.com",
-    "*" # Note: allowing all just for a hackathon is fine, but in production we'd put the frontend domain here
+    "https://clarix-eclipse-hackathon.vercel.app" # The live Vercel frontend URL
 ]
 app.add_middleware(
     CORSMiddleware,
