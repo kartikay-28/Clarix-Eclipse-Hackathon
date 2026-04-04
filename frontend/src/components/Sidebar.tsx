@@ -126,21 +126,21 @@ export default function Sidebar() {
       {/* USER SECTION */}
       <div className="p-3.5 border-t border-border shrink-0">
         <div className="flex items-center gap-[10px] py-2 px-[10px] rounded-lg cursor-pointer transition-colors duration-150 hover:bg-surfaceHover">
-          <div className="w-[30px] h-[30px] rounded-full bg-accent/10 border border-accent/20 text-[11px] font-semibold text-accent flex items-center justify-center shrink-0">
+          <div className="w-[36px] h-[36px] rounded-full bg-accent/10 border border-accent/20 text-[14px] font-semibold text-accent flex items-center justify-center shrink-0">
             {getInitials(user.name)}
           </div>
           <div className="overflow-hidden">
-            <div className="text-[12px] font-medium text-text-primary whitespace-nowrap overflow-hidden text-ellipsis">
+            <div className="text-[14px] font-medium text-text-primary whitespace-nowrap overflow-hidden text-ellipsis">
               {user.name}
             </div>
-            <div className="text-[10px] text-text-muted whitespace-nowrap overflow-hidden text-ellipsis">
+            <div className="text-[12px] text-text-muted mt-[1px] whitespace-nowrap overflow-hidden text-ellipsis">
               {user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Employee'} · {user.org_name || 'Workspace'}
             </div>
           </div>
         </div>
 
-        <div onClick={logout} className="flex items-center gap-[6px] py-[7px] px-[10px] rounded-md text-[11px] text-text-muted cursor-pointer mt-1 transition-colors duration-150 hover:text-text-secondary hover:bg-surfaceHover">
-          <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" fill="none" className="w-[12px] h-[12px]">
+        <div onClick={logout} className="flex items-center gap-[6px] py-[7px] px-[10px] rounded-md text-[13px] text-text-muted cursor-pointer mt-1 transition-colors duration-150 hover:text-text-secondary hover:bg-surfaceHover">
+          <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" fill="none" className="w-[14px] h-[14px]">
             <path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3 M10 11l4-3-4-3M14 8H6" />
           </svg>
           Log out
@@ -149,3 +149,4 @@ export default function Sidebar() {
     </div>
   );
 }
+
