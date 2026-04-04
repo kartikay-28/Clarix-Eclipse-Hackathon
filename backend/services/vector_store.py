@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Using a new path to bypass SQLite schema mismatch errors caused by ChromaDB version changes
-CHROMA_DB_PATH = os.getenv("CHROMA_DB_PATH", "./chroma_db_v2")
+raw_path = os.getenv("CHROMA_DB_PATH", "./chroma_db")
+CHROMA_DB_PATH = f"{raw_path}_v2" if not raw_path.endswith("_v2") else raw_path
 
 # Initialize ChromaDB persistent client ONCE
 try:

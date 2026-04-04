@@ -5,6 +5,14 @@
 
 ---
 
+## 🌐 Live Deployment Links
+
+- **Frontend (Vercel):** [https://clarix-eclipse-hackathon.vercel.app](https://clarix-eclipse-hackathon.vercel.app)
+- **Backend API (Render):** [https://clarix-eclipse-hackathon.onrender.com](https://clarix-eclipse-hackathon.onrender.com)
+*(Note: Since the backend is hosted on Render's Free Tier, the first request may take ~60 seconds to spin up and load the AI models into memory. Subsequent requests will be fast!)*
+
+---
+
 ## 🔴 The Problem
 
 Picture this — it's Monday morning. A new employee at a 500-person company asks:
@@ -30,25 +38,53 @@ No hallucinations. No internet. No guessing. Just your data, made searchable.
 
 ---
 
-## 🏗️ Architecture
+## � Key Features
 
-```
-  Employee asks a question
-        ↓
-  JWT Auth validates identity + extracts org_id
-        ↓
-  Question converted to vector embedding
-        ↓
-  ChromaDB searched — filtered strictly by org_id
-        ↓
-  Top 5 relevant document chunks retrieved
-        ↓
-  Gemini 1.5 Flash answers using ONLY those chunks
-        ↓
-  Answer returned with source citations
+- **Multi-Tenant Architecture:** Strict boundaries separating data between different organizations using Neon DB relations and namespaced ChromaDB collections.
+- **Advanced RAG Pipeline:** Documents are chunked contextually using LangChain and converted into 384-dimensional vector embeddings using CPU-optimized `all-MiniLM-L6-v2`.
+- **Multi-Format Parsing:** Native support for extracting text from `.pdf`, `.docx`, and `.csv` files.
+- **Strict Context Adherence:** Gemini 1.5 Flash is heavily prompt-engineered to **only** answer based on retrieved documents, preventing AI hallucinations. If the answer isn't in your docs, the AI will explicitly say: *"I don't know based on the provided context."*
+- **Direct Source Citations:** Every answer links back to the exact chunk and filename it learned the information from.
+
+---
+
+## 🏗️ System Architecture & Workflow
+
+### 1. Document Ingestion Pipeline
+When an admin uploads a new company document, it goes through a strict chunking and embedding pipeline before becoming searchable:
+
+```mermaid
+graph TD
+    A[Admin User] -->|Uploads PDF/DOCX/CSV| B(Next.js Frontend)
+    B -->|Multipart Form POST| C{FastAPI Backend}
+    C -->|Extract Text| D[File Parsers: PyMuPDF / python-docx]
+    D -->|Raw Text| E[LangChain RecursiveTextSplitter]
+    E -->|Text Chunks| F[SentenceTransformers Embedder]
+    F -->|Vector Embeddings| G[(ChromaDB: org_id collection)]
+    F -->|File Metadata| H[(PostgreSQL: Neon DB)]
+    G -.->|Success| C
+    H -.->|Success| C
+    C -->|Status 200| B
 ```
 
-**Multi-Tenant Isolation** — every organization's data lives in its own ChromaDB collection. An employee of Org A can never access Org B's documents, even if they know the document ID. The `org_id` is extracted from the JWT token server-side — never trusted from the request body.
+### 2. Retrieval-Augmented Generation (RAG) Query Flow
+When an employee asks a question, Clarix intercepts it, finds the most relevant knowledge, and feeds it into the AI to generate a precise answer:
+
+```mermaid
+graph TD
+    A[Employee] -->|Types Question| B(Next.js Frontend)
+    B -->|JWT + Query POST| C{FastAPI Backend}
+    C -->|Validate & Extract org_id| D[JWT Middleware]
+    D -->|Question Text| E[SentenceTransformers Embedder]
+    E -->|Question Vector| F[(ChromaDB: org_id collection)]
+    F -->|Cosine Similarity Search| G[Top 5 Relevant Chunks]
+    G -->|Context + Original Question| H[Gemini 1.5 Flash LLM]
+    H -->|Synthesized Answer| I[Backend API]
+    I -->|Answer + Citations| B
+    B -->|Displays Result| A
+```
+
+**Multi-Tenant Security Isolation** — Every organization's data lives in its own ChromaDB collection. An employee of `Org A` can absolutely never access `Org B`'s documents. The crucial `org_id` is extracted purely from the encrypted JWT token on the server-side and is never trusted or read from client-side request bodies.
 
 ---
 
@@ -56,32 +92,75 @@ No hallucinations. No internet. No guessing. Just your data, made searchable.
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | Next.js 14, Tailwind CSS, shadcn/ui |
-| Backend | Python FastAPI, Uvicorn |
-| Database | PostgreSQL + SQLAlchemy |
-| Auth | JWT (python-jose) + bcrypt |
-| AI / LLM | Google Gemini 1.5 Flash |
-| Embeddings | Sentence-transformers (all-MiniLM-L6-v2) |
-| Vector DB | ChromaDB (persistent, per-org) |
-| RAG Pipeline | LangChain |
-| File Parsing | PyMuPDF, python-docx, pandas |
+| **Frontend** | Next.js 14, Tailwind CSS, shadcn/ui (Deployed on **Vercel**) |
+| **Backend** | Python FastAPI, Uvicorn, SQLAlchemy (Deployed on **Render**) |
+| **Database** | PostgreSQL (Neon DB) |
+| **Auth** | JWT (python-jose) + bcrypt |
+| **AI / LLM** | Google Gemini 1.5 Flash |
+| **Embeddings** | PyTorch (CPU-optimized), Sentence-transformers (all-MiniLM-L6-v2) |
+| **Vector DB** | ChromaDB (persistent, per-org) |
+| **RAG Pipeline** | LangChain |
+| **File Parsing** | PyMuPDF, python-docx, pandas |
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Local Development Setup
 
-```bash
-# 1. Start PostgreSQL
-pg_ctl start
+### 1. Prerequisites
+Ensure you have the following installed on your machine:
+- Node.js (v18 or higher)
+- Python 3.10+
+- A PostgreSQL Database (Local or Neon DB)
 
-# 2. Start backend
-cd backend && uvicorn main:app --reload
+### 2. Run the Backend (FastAPI)
 
-# 3. Start frontend
-cd frontend && npm run dev
-```
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+2. Create and activate a Virtual Environment:
+   ```bash
+   python -m venv venv
+   source venv/Scripts/activate # Windows
+   # source venv/bin/activate   # Mac/Linux
+   ```
+3. Install Python dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Set your Environment Variables in `.env`:
+   ```bash
+   DATABASE_URL=postgresql://user:password@neon.tech/dbname
+   JWT_SECRET=your_super_secret_key
+   JWT_ALGORITHM=HS256
+   GEMINI_API_KEY=your_google_ai_studio_api_key
+   CHROMA_DB_PATH=./chroma_db_v2
+   ```
+5. Start the backend server:
+   ```bash
+   uvicorn main:app --reload
+   ```
+   *The backend will be running at `http://localhost:10000`*
 
-Set your environment variables in `backend/.env` — see `.env.example` for reference.
+### 3. Run the Frontend (Next.js)
+
+1. Open a new terminal and navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install npm dependencies:
+   ```bash
+   npm install
+   ```
+3. Set your Environment Variable in `.env`:
+   ```bash
+   NEXT_PUBLIC_API_URL=http://127.0.0.1:10000
+   ```
+4. Start the frontend application:
+   ```bash
+   npm run dev
+   ```
+   *The frontend will be running at `http://localhost:3000`*
 
 ---
 
