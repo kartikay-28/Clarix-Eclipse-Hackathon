@@ -1,49 +1,20 @@
-import os
-import google.generativeai as genai
+from sentence_transformers import SentenceTransformer
 
-# Configure Google Gemini
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
-
-class GeminiEmbedderProxy:
-    """
-    A lightweight proxy class to replace 'sentence-transformers' locally.
-    Uses Google's free embedding API, which completely stops the 
-    Render Out-of-Memory (OOM) 512MB RAM server crashes.
-    """
-    def __init__(self):
-        # Using the latest active Google Gemini embedding model
-        self.model_name = 'models/text-embedding-004'
-
-    def encode(self, texts, convert_to_numpy=False):
-        # Allow both single string or list of strings
-        content_to_embed = texts if isinstance(texts, list) else [texts]
-        
-        # Batch size for Gemini API embeddings is max 100 texts at a time, we will just send it normally
-        # but robust enough to handle the array.
-        result = genai.embed_content(
-            model=self.model_name,
-            content=content_to_embed
-        )
-        
-        # Return either a single list of floats, or a numpy-like array of lists
-        class MockNumpyResult:
-            def __init__(self, data):
-                self.data = data
-            def tolist(self):
-                return self.data
-                
-        embeddings = result['embedding']
-        # If the input was a single string, SentenceTransformers normally returns a flat array
-        # Gemini returns a list of embeddings.
-        if isinstance(texts, str):
-            return MockNumpyResult(embeddings[0])
-        else:
-            return MockNumpyResult(embeddings)
+# Global embedder instance
+_embedding_model = None
 
 def load_embedding_model():
-    print("Embedding model proxy loaded (Gemini API).")
+    """
+    Loads the sentence-transformers model ONCE at startup.
+    """
+    global _embedding_model
+    if _embedding_model is None:
+        print("Loading embedding model (all-MiniLM-L6-v2)...")
+        _embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+        print("Embedding model loaded.")
 
-def get_embedder():
-    return GeminiEmbedderProxy()
+def get_embedder() -> SentenceTransformer:
+    """Returns the loaded global embedding model, loading it first if necessary."""
+    if _embedding_model is None:
+        load_embedding_model()
+    return _embedding_model
