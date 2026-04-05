@@ -8,7 +8,7 @@
 ## 🌐 Live Deployment Links
 
 - **Frontend (Vercel):** [Clarix Live](https://clarix-eclipse-hackathon.vercel.app)
-- **Backend API (Render):** [Clarix API](https://clarix-eclipse-hackathon.onrender.com)
+- **Backend API (Render):** [Clarix API](https://clarix-eclipse-hackathon.onrender.com) || [Clarix API Docs](https://clarix-eclipse-hackathon.onrender.com/docs)
 
 ---
 
