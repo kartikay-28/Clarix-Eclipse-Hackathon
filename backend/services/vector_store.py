@@ -7,7 +7,7 @@ load_dotenv()
 
 # Using a new path to bypass SQLite schema mismatch errors caused by ChromaDB version changes
 raw_path = os.getenv("CHROMA_DB_PATH", "./chroma_db")
-CHROMA_DB_PATH = f"{raw_path}_v3" if not raw_path.endswith("_v3") else raw_path
+CHROMA_DB_PATH = f"{raw_path}_v4" if not raw_path.endswith("_v4") else raw_path
 
 # Initialize ChromaDB persistent client ONCE
 try:
