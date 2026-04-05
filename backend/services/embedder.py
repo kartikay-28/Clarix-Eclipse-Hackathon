@@ -13,9 +13,8 @@ class GeminiEmbedderProxy:
     Render Out-of-Memory (OOM) 512MB RAM server crashes.
     """
     def __init__(self):
-        # Using the older embedding-001 model string which is guaranteed 
-        # to exist in google-generativeai==0.3.2
-        self.model_name = 'models/embedding-001'
+        # Using the latest active Google Gemini embedding model
+        self.model_name = 'models/text-embedding-004'
 
     def encode(self, texts, convert_to_numpy=False):
         # Allow both single string or list of strings
